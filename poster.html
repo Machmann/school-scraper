@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KW及周边学校开放日与升学海报</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @media print {
+      body { background: white !important; color: black !important; padding: 0 !important; }
+      .no-print { display: none !important; }
+      .poster-card { break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased p-3 sm:p-6 font-sans">
+
+  <!-- 海报主容器 -->
+  <div class="max-w-4xl mx-auto bg-white text-slate-900 border border-slate-200 rounded-2xl shadow-xl overflow-hidden transition-all duration-300">
+    
+    <!-- 海报顶部 Hero 区域 -->
+    <div class="relative bg-gradient-to-r from-blue-700 via-indigo-600 to-purple-700 text-white p-6 sm:p-8 overflow-hidden">
+      <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="absolute -left-10 -top-10 w-40 h-40 bg-purple-400/20 rounded-full blur-xl pointer-events-none"></div>
+
+      <div class="relative z-10">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-md text-white border border-white/30 shadow-sm">
+            <span>🇩🇪 德国勃兰登堡 · Dahme-Spreewald</span>
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/80 backdrop-blur-md text-white shadow-sm">
+            <span>✨ 2027 升学季活动指南</span>
+          </span>
+        </div>
+
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-2">
+          Königs Wusterhausen 及周边重点中学
+        </h1>
+        <p class="text-white/85 text-sm sm:text-base max-w-2xl leading-relaxed">
+          校园开放日 (Tag der offenen Tür) 与高中升学说明会 (Informationsabend) 全景资讯看板
+        </p>
+
+        <!-- 工具栏 -->
+        <div class="no-print mt-6 flex flex-wrap items-center gap-2 pt-2 border-t border-white/20 text-xs">
+          <span class="text-white/80 font-medium mr-1">🔍 筛选类别:</span>
+          <button onclick="filterEvents('all')" id="btn-all" class="filter-btn px-3 py-1.5 rounded-lg font-medium transition bg-white text-indigo-900 shadow">
+            全部 (4)
+          </button>
+          <button onclick="filterEvents('gymnasium')" id="btn-gymnasium" class="filter-btn px-3 py-1.5 rounded-lg font-medium transition bg-white/15 text-white hover:bg-white/25">
+            Gymnasium 文理中学
+          </button>
+          <button onclick="filterEvents('gesamtschule')" id="btn-gesamtschule" class="filter-btn px-3 py-1.5 rounded-lg font-medium transition bg-white/15 text-white hover:bg-white/25">
+            Gesamtschule 综合高中
+          </button>
+          
+          <div class="ml-auto flex items-center gap-2">
+            <button onclick="window.print()" class="px-3 py-1.5 rounded-lg font-semibold bg-white/20 hover:bg-white/30 text-white flex items-center gap-1.5 transition border border-white/30 shadow-sm">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+              <span>保存/打印海报</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 活动列表网格 -->
+    <div class="p-6 sm:p-8 space-y-6">
+      <div id="events-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+        <!-- 卡片 1: Friedrich-Wilhelm-Gymnasium -->
+        <div class="event-item poster-card bg-white border-2 border-indigo-200 hover:border-indigo-500 rounded-xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-type="gymnasium">
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-3">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                🏛️ Gymnasium 文理中学
+              </span>
+              <span class="px-2 py-0.5 rounded text-xs font-semibold bg-rose-50 text-rose-600 border border-rose-200">
+                热门重点校
+              </span>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-900 leading-snug">
+              Friedrich-Wilhelm-Gymnasium (KW)
+            </h3>
+            <div class="text-sm font-semibold text-indigo-600 mt-1 flex items-center gap-1.5">
+              <span>🎉 Tag der offenen Tür (开放日)</span>
+            </div>
+
+            <div class="mt-4 space-y-2 text-xs sm:text-sm text-slate-600">
+              <div class="flex items-center gap-2">
+                <span class="text-base">📅</span>
+                <span class="font-semibold text-slate-900">2027年1月22日 15:30 - 18:30</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-base">👥</span>
+                <span>目标人群：未来7年级新生及家长</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-base">📍</span>
+                <span>地点：Königs Wusterhausen 校区</span>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-600 leading-relaxed">
+              <span class="font-semibold text-slate-900">活动亮点：</span>
+              入校实地参观现代化理化实验室、多功能艺术中心；与各学科教师面对面咨询未来外语课程选择及特色社团介绍。
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 flex items-center justify-between gap-2 border-t border-slate-100">
+            <a href="https://fwg.dahme-spreewald.de/fwg/start" target="_blank" class="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:underline">
+              <span>查看官网公告</span>
+              <span>→</span>
+            </a>
+            <button onclick="downloadIcs('Friedrich-Wilhelm-Gymnasium 开放日', '20270122T143000Z', '20270122T173000Z', 'FWG Königs Wusterhausen', 'https://fwg.dahme-spreewald.de/fwg/start')" class="no-print px-2.5 py-1 rounded bg-slate-100 hover:bg-indigo-50 text-xs font-medium text-slate-700 transition flex items-center gap-1">
+              <span>➕ 存入日历</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 卡片 2: Gesamtschule KW (Oberstufe) -->
+        <div class="event-item poster-card bg-white border-2 border-purple-200 hover:border-purple-500 rounded-xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-type="gesamtschule">
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-3">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-bold bg-purple-50 text-purple-700 border border-purple-200">
+                🏫 Gesamtschule 综合高中
+              </span>
+              <span class="px-2 py-0.5 rounded text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                高中部说明会
+              </span>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-900 leading-snug">
+              Gesamtschule KW (Oberstufe)
+            </h3>
+            <div class="text-sm font-semibold text-purple-600 mt-1 flex items-center gap-1.5">
+              <span>📢 Infoabend gymnasiale Oberstufe</span>
+            </div>
+
+            <div class="mt-4 space-y-2 text-xs sm:text-sm text-slate-600">
+              <div class="flex items-center gap-2">
+                <span class="text-base">📅</span>
+                <span class="font-semibold text-slate-900">2027年1月15日 18:00 - 20:00</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-base">👥</span>
+                <span>目标人群：10年级毕业生及家长 (初升高)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-base">📍</span>
+                <span>地点：Gesamtschule KW 大礼堂</span>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-600 leading-relaxed">
+              <span class="font-semibold text-slate-900">活动亮点：</span>
+              详细解读普通高中高级阶段 (GOST) 选课制度、Abitur 考核评分细则、跨校转学与综合高中入学申请时间线。
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 flex items-center justify-between gap-2 border-t border-slate-100">
+            <a href="https://gesamtschule-kw.de" target="_blank" class="inline-flex items-center gap-1 text-xs font-semibold text-purple-600 hover:underline">
+              <span>查看官网公告</span>
+              <span>→</span>
+            </a>
+            <button onclick="downloadIcs('Gesamtschule KW 高中部说明会', '20270115T170000Z', '20270115T190000Z', 'Gesamtschule KW', 'https://gesamtschule-kw.de')" class="no-print px-2.5 py-1 rounded bg-slate-100 hover:bg-purple-50 text-xs font-medium text-slate-700 transition flex items-center gap-1">
+              <span>➕ 存入日历</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 卡片 3: Schiller-Gymnasium KW -->
+        <div class="event-item poster-card bg-white border border-slate-200 hover:border-blue-500 rounded-xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-type="gymnasium">
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-3">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                🏛️ Gymnasium 文理中学
+              </span>
+              <span class="px-2 py-0.5 rounded text-xs font-semibold bg-blue-50 text-blue-600">
+                特色体验
+              </span>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-900 leading-snug">
+              Schiller-Gymnasium (KW)
+            </h3>
+            <div class="text-sm font-semibold text-blue-600 mt-1 flex items-center gap-1.5">
+              <span>🎉 Schnuppertag & Offene Tür</span>
+            </div>
+
+            <div class="mt-4 space-y-2 text-xs sm:text-sm text-slate-600">
+              <div class="flex items-center gap-2">
+                <span class="text-base">📅</span>
+                <span class="font-semibold text-slate-900">2027年1月17日 10:00 - 13:00</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-base">👥</span>
+                <span>目标人群：6年级升学新生及家长</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-base">📍</span>
+                <span>地点：Königs Wusterhausen</span>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-600 leading-relaxed">
+              <span class="font-semibold text-slate-900">活动亮点：</span>
+              双语特色教学展示、音乐及体育社团体验课，提供小班升学一对一答疑与学籍登记前瞻指导。
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 flex items-center justify-between gap-2 border-t border-slate-100">
+            <span class="text-xs text-slate-500">Königs Wusterhausen</span>
+            <button onclick="downloadIcs('Schiller-Gymnasium 开放日', '20270117T090000Z', '20270117T120000Z', 'Schiller-Gymnasium KW', '')" class="no-print px-2.5 py-1 rounded bg-slate-100 hover:bg-blue-50 text-xs font-medium text-slate-700 transition flex items-center gap-1">
+              <span>➕ 存入日历</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 卡片 4: Humboldt-Gymnasium Eichwalde -->
+        <div class="event-item poster-card bg-white border border-slate-200 hover:border-emerald-500 rounded-xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-type="gymnasium">
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-3">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                🏛️ 周边 Gymnasium
+              </span>
+              <span class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-600">
+                S-Bahn直达
+              </span>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-900 leading-snug">
+              Humboldt-Gymnasium Eichwalde
+            </h3>
+            <div class="text-sm font-semibold text-emerald-600 mt-1 flex items-center gap-1.5">
+              <span>🎉 Tag der offenen Tür (开放日)</span>
+            </div>
+
+            <div class="mt-4 space-y-2 text-xs sm:text-sm text-slate-600">
+              <div class="flex items-center gap-2">
+                <span class="text-base">📅</span>
+                <span class="font-semibold text-slate-900">2027年1月24日 14:00 - 17:00</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-base">👥</span>
+                <span>目标人群：初中预备生及高年级插班生</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-base">📍</span>
+                <span>地点：Eichwalde (近KW北)</span>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-600 leading-relaxed">
+              <span class="font-semibold text-slate-900">活动亮点：</span>
+              自然科学 MINT 重点实验室开放，高年级学生志愿者引领游园，介绍海外研学与数字化教学课堂。
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 flex items-center justify-between gap-2 border-t border-slate-100">
+            <span class="text-xs text-slate-500">S8 / S46 沿线</span>
+            <button onclick="downloadIcs('Humboldt-Gymnasium Eichwalde 开放日', '20270124T130000Z', '20270124T160000Z', 'Humboldt-Gymnasium Eichwalde', '')" class="no-print px-2.5 py-1 rounded bg-slate-100 hover:bg-emerald-50 text-xs font-medium text-slate-700 transition flex items-center gap-1">
+              <span>➕ 存入日历</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 底部升学须知提示卡片 -->
+      <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 sm:p-5 text-xs sm:text-sm text-slate-800 flex items-start gap-3">
+        <span class="text-xl shrink-0">💡</span>
+        <div class="space-y-1">
+          <p class="font-bold text-blue-800">德国勃兰登堡州升学温馨提示 (Übergangsverfahren)：</p>
+          <ul class="list-disc list-inside text-slate-600 space-y-0.5 text-xs">
+            <li><strong>7年级过渡</strong>：开放日通常集中在每年 1 月，报名需提交初中毕业能力评估及升学意向表 (Grundschulgutachten)。</li>
+            <li><strong>高中阶段 (Oberstufe)</strong>：综合高中学生可通过 10 年级结业考 (FOR-Q) 升入本校或外校普通高中阶段准备 Abitur。</li>
+            <li>建议带上学生近两期成绩单复印件，方便现场与负责教师沟通意向课程。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 页脚信息 -->
+    <div class="bg-slate-100 px-6 py-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
+      <span>📡 数据源：学校官网动态抓取 & Google Gemini 结构化处理</span>
+      <span>自动化监控系统 · 2026/2027 学年度</span>
+    </div>
+
+  </div>
+
+  <script>
+    function filterEvents(type) {
+      const items = document.querySelectorAll('.event-item');
+      const buttons = document.querySelectorAll('.filter-btn');
+
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-white', 'text-indigo-900', 'shadow');
+        btn.classList.add('bg-white/15', 'text-white');
+      });
+
+      const activeBtn = document.getElementById('btn-' + type);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-white', 'text-indigo-900', 'shadow');
+        activeBtn.classList.remove('bg-white/15', 'text-white');
+      }
+
+      items.forEach(item => {
+        if (type === 'all' || item.getAttribute('data-type') === type) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    function downloadIcs(title, startIso, endIso, location, url) {
+      const icsContent = 
+`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//School Events Scraper//CN
+BEGIN:VEVENT
+SUMMARY:${title}
+DTSTART:${startIso}
+DTEND:${endIso}
+LOCATION:${location}
+DESCRIPTION:活动详情与官网：${url}
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR`;
+
+      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.setAttribute('download', `${title}.ics`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>
