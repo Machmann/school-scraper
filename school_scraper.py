@@ -3,6 +3,7 @@ import json
 import re
 import html
 import time
+import ssl
 import urllib.request
 import urllib.error
 
@@ -28,10 +29,12 @@ def fetch_school_events():
     
     scraped_data = {}
     
+    ssl_context = ssl._create_unverified_context()
+    
     for key, info in schools_config.items():
         try:
             req = urllib.request.Request(info["url"], headers=headers)
-            with urllib.request.urlopen(req, timeout=10) as response:
+            with urllib.request.urlopen(req, timeout=10, context=ssl_context) as response:
                 html_text = response.read().decode('utf-8', errors='ignore')
                 
                 # 清洗 HTML 标签，保留纯文本供 AI 分析
