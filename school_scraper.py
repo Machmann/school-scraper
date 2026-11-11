@@ -1,6 +1,8 @@
 import os
 import json
 import re
+import html
+import time
 import urllib.request
 import urllib.error
 
@@ -178,13 +180,247 @@ def send_telegram_notification(events, bot_token=None, chat_id=None):
     except Exception as e:
         print(f"Telegram 推送失败: {e}")
 
+# ==================== 4. UI 海报生成模块 ====================
+def generate_html_poster(events, output_path=None):
+    """
+    将提取到的结构化活动数据动态渲染为现代响应式 UI 海报 (HTML)
+    """
+    if not events:
+        print("未获取到活动数据，跳过海报生成。")
+        return None
+
+    if output_path is None:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        output_path = os.path.join(script_dir, "poster.html")
+
+    card_templates = []
+    for idx, item in enumerate(events):
+        school = html.escape(str(item.get("school", "未知学校")))
+        event_name = html.escape(str(item.get("event_name", "校园活动")))
+        date = html.escape(str(item.get("date", "待定")))
+        target_group = html.escape(str(item.get("target_group", "全体师生及家长")))
+        summary = html.escape(str(item.get("summary", "")))
+        url = html.escape(str(item.get("url", "#")))
+
+        is_gym = "gymnasium" in school.lower()
+        cat_type = "gymnasium" if is_gym else "gesamtschule"
+        badge_text = "🏛️ Gymnasium 文理中学" if is_gym else "🏫 Gesamtschule 综合高中"
+        badge_style = "bg-blue-50 text-blue-700 border-blue-200" if is_gym else "bg-purple-50 text-purple-700 border-purple-200"
+        border_style = "border-blue-200 hover:border-blue-500" if is_gym else "border-purple-200 hover:border-purple-500"
+        title_color = "text-indigo-600" if is_gym else "text-purple-600"
+
+        card_html = f"""
+        <!-- 卡片 {idx + 1}: {school} -->
+        <div class="event-item poster-card bg-white border-2 {border_style} rounded-xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-type="{cat_type}">
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-3">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-bold border {badge_style}">
+                {badge_text}
+              </span>
+              <span class="px-2 py-0.5 rounded text-xs font-semibold bg-rose-50 text-rose-600 border border-rose-200">
+                开放日/说明会
+              </span>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-900 leading-snug">
+              {school}
+            </h3>
+            <div class="text-sm font-semibold {title_color} mt-1 flex items-center gap-1.5">
+              <span>🎉 {event_name}</span>
+            </div>
+
+            <div class="mt-4 space-y-2 text-xs sm:text-sm text-slate-600">
+              <div class="flex items-center gap-2">
+                <span class="text-base">📅</span>
+                <span class="font-semibold text-slate-900">{date}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-base">👥</span>
+                <span>目标人群：{target_group}</span>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-600 leading-relaxed">
+              <span class="font-semibold text-slate-900">活动亮点：</span>
+              {summary}
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 flex items-center justify-between gap-2 border-t border-slate-100">
+            <a href="{url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:underline">
+              <span>查看官网公告</span>
+              <span>→</span>
+            </a>
+            <button onclick="downloadIcs('{school} - {event_name}', '{date}', '{school}', '{url}')" class="no-print px-2.5 py-1 rounded bg-slate-100 hover:bg-indigo-50 text-xs font-medium text-slate-700 transition flex items-center gap-1">
+              <span>➕ 存入日历</span>
+            </button>
+          </div>
+        </div>
+        """
+        card_templates.append(card_html)
+
+    cards_joined = "\n".join(card_templates)
+
+    html_content = f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KW及周边学校开放日与升学海报</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @media print {{
+      body {{ background: white !important; color: black !important; padding: 0 !important; }}
+      .no-print {{ display: none !important; }}
+      .poster-card {{ break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; }}
+    }}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased p-3 sm:p-6 font-sans">
+
+  <!-- 海报主容器 -->
+  <div class="max-w-4xl mx-auto bg-white text-slate-900 border border-slate-200 rounded-2xl shadow-xl overflow-hidden transition-all duration-300">
+    
+    <!-- 顶部 Hero 区域 -->
+    <div class="relative bg-gradient-to-r from-blue-700 via-indigo-600 to-purple-700 text-white p-6 sm:p-8 overflow-hidden">
+      <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="absolute -left-10 -top-10 w-40 h-40 bg-purple-400/20 rounded-full blur-xl pointer-events-none"></div>
+
+      <div class="relative z-10">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-md text-white border border-white/30 shadow-sm">
+            <span>🇩🇪 德国勃兰登堡 · Dahme-Spreewald</span>
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/80 backdrop-blur-md text-white shadow-sm">
+            <span>✨ 升学季活动指南</span>
+          </span>
+        </div>
+
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-2">
+          Königs Wusterhausen 及周边重点中学
+        </h1>
+        <p class="text-white/85 text-sm sm:text-base max-w-2xl leading-relaxed">
+          校园开放日 (Tag der offenen Tür) 与高中升学说明会 (Informationsabend) 全景看板
+        </p>
+
+        <!-- 工具栏 -->
+        <div class="no-print mt-6 flex flex-wrap items-center gap-2 pt-2 border-t border-white/20 text-xs">
+          <span class="text-white/80 font-medium mr-1">🔍 筛选类别:</span>
+          <button onclick="filterEvents('all')" id="btn-all" class="filter-btn px-3 py-1.5 rounded-lg font-medium transition bg-white text-indigo-900 shadow">
+            全部 ({len(events)})
+          </button>
+          <button onclick="filterEvents('gymnasium')" id="btn-gymnasium" class="filter-btn px-3 py-1.5 rounded-lg font-medium transition bg-white/15 text-white hover:bg-white/25">
+            Gymnasium 文理中学
+          </button>
+          <button onclick="filterEvents('gesamtschule')" id="btn-gesamtschule" class="filter-btn px-3 py-1.5 rounded-lg font-medium transition bg-white/15 text-white hover:bg-white/25">
+            Gesamtschule 综合高中
+          </button>
+          
+          <div class="ml-auto flex items-center gap-2">
+            <button onclick="window.print()" class="px-3 py-1.5 rounded-lg font-semibold bg-white/20 hover:bg-white/30 text-white flex items-center gap-1.5 transition border border-white/30 shadow-sm">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+              <span>保存/打印海报</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片列表网格 -->
+    <div class="p-6 sm:p-8 space-y-6">
+      <div id="events-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+{cards_joined}
+      </div>
+
+      <!-- 底部升学须知提示卡片 -->
+      <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 sm:p-5 text-xs sm:text-sm text-slate-800 flex items-start gap-3">
+        <span class="text-xl shrink-0">💡</span>
+        <div class="space-y-1">
+          <p class="font-bold text-blue-800">德国升学温馨提示 (Übergangsverfahren)：</p>
+          <ul class="list-disc list-inside text-slate-600 space-y-0.5 text-xs">
+            <li><strong>7年级过渡</strong>：开放日通常集中在每年 1 月，报名需提交初中毕业能力评估及升学意向表 (Grundschulgutachten)。</li>
+            <li><strong>高中阶段 (Oberstufe)</strong>：综合高中学生可通过 10 年级结业考 (FOR-Q) 升入本校或外校高中部准备 Abitur。</li>
+            <li>建议带上学生近两期成绩单复印件，方便现场咨询负责教师。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 页脚信息 -->
+    <div class="bg-slate-100 px-6 py-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
+      <span>📡 数据源：学校官网抓取 & Google Gemini 结构化处理</span>
+      <span>自动化生成时间：{time.strftime('%Y-%m-%d %H:%M')}</span>
+    </div>
+
+  </div>
+
+  <script>
+    function filterEvents(type) {{
+      const items = document.querySelectorAll('.event-item');
+      const buttons = document.querySelectorAll('.filter-btn');
+
+      buttons.forEach(btn => {{
+        btn.classList.remove('bg-white', 'text-indigo-900', 'shadow');
+        btn.classList.add('bg-white/15', 'text-white');
+      }});
+
+      const activeBtn = document.getElementById('btn-' + type);
+      if (activeBtn) {{
+        activeBtn.classList.add('bg-white', 'text-indigo-900', 'shadow');
+        activeBtn.classList.remove('bg-white/15', 'text-white');
+      }}
+
+      items.forEach(item => {{
+        if (type === 'all' || item.getAttribute('data-type') === type) {{
+          item.style.display = 'flex';
+        }} else {{
+          item.style.display = 'none';
+        }}
+      }});
+    }}
+
+    function downloadIcs(title, dateStr, location, url) {{
+      const icsContent = 
+`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//School Events Scraper//CN
+BEGIN:VEVENT
+SUMMARY:${{title}}
+DESCRIPTION:时间：${{dateStr}}\\n官网：${{url}}
+LOCATION:${{location}}
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR`;
+
+      const blob = new Blob([icsContent], {{ type: 'text/calendar;charset=utf-8' }});
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.setAttribute('download', `${{title}}.ics`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }}
+  </script>
+</body>
+</html>
+"""
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(html_content)
+
+    print(f"\n[海报生成成功] UI 海报已保存至: {os.path.abspath(output_path)}")
+    return os.path.abspath(output_path)
+
 # ==================== 主入口与测试 ====================
 if __name__ == "__main__":
-    print(">>> [1/3] 开始抓取学校网页数据...")
+    print(">>> [1/4] 开始抓取学校网页数据...")
     scraped_text = fetch_school_events()
     
-    print("\n>>> [2/3] 开始使用大模型提取结构化数据...")
+    print("\n>>> [2/4] 开始使用大模型提取结构化数据...")
     parsed_events = extract_events_with_llm(scraped_text)
     
-    print("\n>>> [3/3] 部署推送/展示格式化预览...")
+    print("\n>>> [3/4] 部署推送/展示格式化预览...")
     send_telegram_notification(parsed_events)
+    
+    print("\n>>> [4/4] 渲染生成现代 UI 活动海报...")
+    poster_path = generate_html_poster(parsed_events)
+    
