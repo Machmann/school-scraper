@@ -4,6 +4,7 @@ import re
 import html
 import time
 import ssl
+import webbrowser
 import urllib.request
 import urllib.error
 
@@ -410,8 +411,17 @@ END:VCALENDAR`;
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(html_content)
 
-    print(f"\n[海报生成成功] UI 海报已保存至: {os.path.abspath(output_path)}")
-    return os.path.abspath(output_path)
+    abs_poster_path = os.path.abspath(output_path)
+    print(f"\n[海报生成成功] UI 海报已保存至: {abs_poster_path}")
+    
+    # 自动调起系统默认浏览器打开海报
+    try:
+        print("[正在打开浏览器查看海报...]")
+        webbrowser.open(f"file://{abs_poster_path}")
+    except Exception as e:
+        print(f"调起浏览器提示: 请在终端输入 open '{abs_poster_path}' 打开")
+
+    return abs_poster_path
 
 # ==================== 主入口与测试 ====================
 if __name__ == "__main__":
