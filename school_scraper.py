@@ -21,6 +21,18 @@ def fetch_school_events():
         "Gesamtschule_KW": {
             "name": "Gesamtschule KW (Oberstufe)",
             "url": "https://gesamtschule-kw.de"
+        },
+        "Schiller_KW": {
+            "name": "Schiller-Gymnasium (KW)",
+            "url": "https://schillergymnasium-kw.de"
+        },
+        "Humboldt_Eichwalde": {
+            "name": "Humboldt-Gymnasium Eichwalde",
+            "url": "https://humboldt-gymnasium-eichwalde.de"
+        },
+        "Gymnasium_Schoenefeld": {
+            "name": "Gymnasium Schönefeld",
+            "url": "https://gymnasium-schoenefeld.de"
         }
     }
     
@@ -66,7 +78,7 @@ def extract_events_with_llm(scraped_data, api_key=None, model_name="gemini-1.5-f
                 "event_name": "Tag der offenen Tür (开放日)",
                 "date": "2027-01-22 15:30-18:30",
                 "target_group": "未来7年级新生及家长",
-                "summary": "入校实地参观与教学特色介绍",
+                "summary": "入校实地参观现代化理化实验室、多功能艺术中心；与各学科教师面对面交流课程特色。",
                 "url": "https://fwg.dahme-spreewald.de/fwg/start"
             },
             {
@@ -74,8 +86,32 @@ def extract_events_with_llm(scraped_data, api_key=None, model_name="gemini-1.5-f
                 "event_name": "Informationsabend zur gymnasialen Oberstufe (高中部宣讲会)",
                 "date": "2027-01-15 18:00-20:00",
                 "target_group": "10年级毕业生及家长",
-                "summary": "介绍高中阶段课程设置与入学申请要求",
+                "summary": "详细解读普通高中高级阶段 (GOST) 选课制度、Abitur 考核评分细则及入学申请时间线。",
                 "url": "https://gesamtschule-kw.de"
+            },
+            {
+                "school": "Schiller-Gymnasium (KW)",
+                "event_name": "Schnuppertag & Offene Tür (校园开放体验日)",
+                "date": "2027-01-17 10:00-13:00",
+                "target_group": "6年级升学新生及家长",
+                "summary": "双语特色教学展示、音乐及体育社团体验课，提供小班升学一对一答疑与学籍登记前瞻指导。",
+                "url": "https://schillergymnasium-kw.de"
+            },
+            {
+                "school": "Humboldt-Gymnasium Eichwalde",
+                "event_name": "Tag der offenen Tür (开放日与成果展)",
+                "date": "2027-01-24 14:00-17:00",
+                "target_group": "初中预备生及周边升学意向家庭",
+                "summary": "自然科学 MINT 重点实验室开放，高年级学生志愿者引领游园，介绍海外研学与数字化课堂。",
+                "url": "https://humboldt-gymnasium-eichwalde.de"
+            },
+            {
+                "school": "Gymnasium Schönefeld",
+                "event_name": "Informations- und Kennenlerntag (学校宣讲开放日)",
+                "date": "2027-01-31 10:00-13:00",
+                "target_group": "未来7年级新生及家长",
+                "summary": "全新校舍实地探访，展示现代化教学空间、创客工坊以及多语种外语教学特色。",
+                "url": "https://gymnasium-schoenefeld.de"
             }
         ]
 
